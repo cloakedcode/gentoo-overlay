@@ -1,34 +1,33 @@
-# Copyright 1999-2013 Gentoo Foundation
+# Copyright 1999-2014 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
 EAPI=5
 
-inherit multilib unpacker eutils
+inherit unpacker
 
-DESCRIPTION="Vagrant is a tool for building complete development environments."
-HOMEPAGE="http://www.vagrantup.com/"
-SRC_URI_BASE="http://dl.bintray.com/mitchellh/vagrant/"
-SRC_URI="x86? ( ${SRC_URI_BASE}/${PN/-bin/}_${PV}_i686.deb )
-         amd64? ( ${SRC_URI_BASE}/${PN/-bin/}_${PV}_x86_64.deb )"
-
+DDESCRIPTION="A tool for building and distributing virtual machines using VirtualBox"
+HOMEPAGE="http://vagrantup.com/"
+SRC_URI="
+	x86? ( https://dl.bintray.com/mitchellh/vagrant/vagrant_${PV}_i686.deb )
+	amd64? ( https://dl.bintray.com/mitchellh/vagrant/vagrant_${PV}_x86_64.deb )"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE=""
-RESTRICT="test strip mirror"
 
-DEPEND=""
-RDEPEND="${DEPEND}"
+S="${WORKDIR}/"
 
-S="${WORKDIR}/opt/vagrant"
-QA_PREBUILT="*"
+RDEPEND="${RDEPEND}
+	app-arch/libarchive
+	net-misc/curl
+	!x64-macos? ( || ( app-emulation/virtualbox app-emulation/virtualbox-bin ) )"
+
+src_unpack() {
+	unpack_deb ${A}
+}
 
 src_install() {
-    local version flapper
-
-	dodir /opt/vagrant
-	cp -ar ./* "${ED}opt/vagrant"
-
-	make_wrapper vagrant /opt/vagrant/bin/vagrant
+	cp -R "${S}/usr" "${D}/" || die "Install failed!"
+	cp -R "${S}/opt" "${D}/" || die "Install failed!"
 }
