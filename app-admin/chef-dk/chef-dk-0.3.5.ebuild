@@ -23,7 +23,7 @@ src_unpack() {
 }
 
 src_install() {
-  local dest="${D}/opt"
+  local dest="/opt"
   mkdir -p "$dest"
 
   cp -pR ./opt/* "$dest"
