@@ -23,12 +23,12 @@ src_unpack() {
 }
 
 src_install() {
-  local dest="${D}/opt"
+  local dest="/opt"
   mkdir -p "$dest"
 
   cp -pR ./opt/* "$dest"
 }
 
 pkg_postinst() {
-  elog "You should add ${D}/opt/chefdk/bin to your PATH."
+  elog "You should add ${ROOT}opt/chefdk/bin to your PATH."
 }
